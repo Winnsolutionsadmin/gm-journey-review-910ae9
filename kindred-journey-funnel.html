@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kindred - Family Journey (wireframe v1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Kindred Journey wireframe - uses the LIVE portal token system
+   (src/index.css, zen refit 2026-07-14). Status vocabulary:
+   sage = clear/confirmed · teal = worth knowing · gold = needs
+   attention · clay = critical. No gray chrome, no siren red.
+   ============================================================ */
+:root{
+  --surface:#FBF7EE; --paper-2:#F0E9D8; --card:#FFFDF9;
+  --primary:#3D8189; --primary-dim:#2F6B72; --on-primary:#fff;
+  --secondary:#6F8F70; --secondary-container:#DCE7DA; --on-secondary-container:#1a3a1a;
+  --tertiary-deep:#B08D4C; --tertiary-container:#EEDFC4; --on-tertiary-container:#3d2e1a;
+  --sage-wash:#E6EDE2; --gold-wash:#F2E7D0; --critical:#A8503C; --critical-wash:#F4E2DB;
+  --ink:#1F2A2E; --ink-2:#3F5359; --ink-3:#6F7F84;
+  --outline:#DCD2BB; --ghost:1px solid rgba(176,166,138,.28);
+  --shadow-soft:0 12px 34px rgba(49,51,51,.06); --shadow-lift:0 20px 60px rgba(49,51,51,.10);
+  --r-card:12px; --r-sm:6px; --r-full:9999px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--surface);color:var(--ink);
+  -webkit-font-smoothing:antialiased;padding:28px 32px 64px;min-height:100vh}
+
+/* ---------- header ---------- */
+.crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+h1{font-family:'Newsreader',serif;font-weight:500;font-size:34px;margin:6px 0 2px}
+.sub{font-size:13px;color:var(--ink-2);max-width:64ch}
+.controls{display:flex;gap:8px;margin:18px 0 26px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--paper-2);border-radius:var(--r-full);padding:3px;border:var(--ghost)}
+.seg button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--ink-2);
+  padding:6px 14px;border-radius:var(--r-full);cursor:pointer}
+.seg button.on{background:var(--card);color:var(--primary-dim);box-shadow:var(--shadow-soft)}
+.chip-filter{font-size:12px;font-weight:600;color:var(--ink-2);background:var(--card);border:var(--ghost);
+  border-radius:var(--r-full);padding:8px 14px}
+
+/* ---------- the river (signature element) ----------
+   Families flow left -> right. Each stage is a station; the teal band's
+   height encodes how many families survive to that stage. Losses drip
+   DOWN from the gap between stations into the release tray. */
+.river-wrap{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-soft);
+  border:var(--ghost);padding:26px 26px 18px;overflow-x:auto}
+.river{display:grid;grid-template-columns:repeat(7,minmax(128px,1fr));gap:0;min-width:960px}
+.station{position:relative;padding:0 10px}
+.station + .station{border-left:1px dashed var(--outline)}
+.st-head{min-height:58px}
+.st-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--ink-3)}
+.st-name{font-size:14px;font-weight:700;color:var(--ink);margin-top:2px}
+.st-src{font-size:10px;color:var(--ink-3);margin-top:2px;font-style:italic}
+.band{position:relative;height:170px;display:flex;align-items:flex-end;margin-top:8px}
+.band .flow{width:100%;background:linear-gradient(180deg,#4E969E, var(--primary));
+  border-radius:8px 8px 3px 3px;position:relative;transition:height .5s ease}
+.band .flow.thin{background:linear-gradient(180deg,#8AB6BB,#6FA3AA)}
+.count{position:absolute;top:-30px;left:0;font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:var(--ink)}
+.count small{font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;margin-left:4px}
+.conv{margin:10px 0 4px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;
+  border-radius:var(--r-full);padding:4px 10px}
+.conv.sage{background:var(--sage-wash);color:var(--on-secondary-container)}
+.conv.gold{background:var(--gold-wash);color:var(--on-tertiary-container)}
+.conv.clay{background:var(--critical-wash);color:var(--critical)}
+.conv .vs{font-weight:600;color:inherit;opacity:.7;font-size:10px}
+
+/* the drip: families lost between this station and the next */
+.drip{position:absolute;right:-11px;bottom:-44px;width:22px;text-align:center;z-index:2}
+.drip .dot{width:22px;height:22px;border-radius:50%;background:var(--critical-wash);color:var(--critical);
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto;
+  border:1px solid rgba(168,80,60,.25)}
+.drip .lbl{font-size:9px;color:var(--ink-3);margin-top:2px;white-space:nowrap}
+
+/* names, not bars: at GM scale every family below ~12 is a chip */
+.chips{margin-top:14px;display:flex;flex-direction:column;gap:4px;min-height:120px}
+.chip{font-size:11px;font-weight:600;background:var(--surface);border:var(--ghost);border-radius:var(--r-sm);
+  padding:4px 8px;color:var(--ink-2);display:flex;justify-content:space-between;gap:6px;cursor:pointer}
+.chip:hover{background:var(--sage-wash)}
+.chip .d{color:var(--ink-3);font-weight:500;font-size:10px}
+.chip.warm{border-left:3px solid var(--tertiary-deep)}
+.chip.stuck{border-left:3px solid var(--critical)}
+.chip.ok{border-left:3px solid var(--secondary)}
+.more{font-size:10px;color:var(--primary-dim);font-weight:700;padding:2px 0;cursor:pointer}
+
+/* ---------- release tray ---------- */
+.tray{margin-top:54px;background:var(--surface);border:1px dashed var(--outline);border-radius:var(--r-card);
+  padding:16px 20px}
+.tray h3{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--critical);font-weight:800}
+.tray .t-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.t-chip{font-size:11px;font-weight:600;background:var(--critical-wash);color:var(--critical);
+  border-radius:var(--r-sm);padding:5px 10px}
+.t-chip small{opacity:.75;font-weight:500}
+
+/* ---------- lower grid: leaks + cohort + wiring ---------- */
+.grid{display:grid;grid-template-columns:1.15fr .95fr 1fr;gap:18px;margin-top:22px}
+.panel{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-soft);border:var(--ghost);padding:20px 22px}
+.panel h2{font-family:'Newsreader',serif;font-size:19px;font-weight:600;margin-bottom:4px}
+.panel .ps{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.leak{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(0,0,0,.05)}
+.leak:first-of-type{border-top:0}
+.leak .rank{font-family:'Newsreader',serif;font-size:20px;color:var(--ink-3);width:20px}
+.leak .what{flex:1}
+.leak .what b{font-size:13px;display:block}
+.leak .what span{font-size:11px;color:var(--ink-2)}
+.leak .rate{font-size:15px;font-weight:800}
+.leak .rate.clay{color:var(--critical)} .leak .rate.gold{color:var(--tertiary-deep)} .leak .rate.sage{color:var(--secondary)}
+.fix{font-size:11px;background:var(--sage-wash);color:var(--on-secondary-container);border-radius:var(--r-sm);
+  padding:3px 8px;font-weight:700;white-space:nowrap}
+
+/* cohort strip: source rows x outcome */
+.cohort table{width:100%;border-collapse:collapse;font-size:12px}
+.cohort th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:6px 4px;font-weight:800}
+.cohort td{padding:7px 4px;border-top:1px solid rgba(0,0,0,.05)}
+.cohort td.n{font-weight:700}
+.bar{height:8px;border-radius:4px;background:var(--paper-2);overflow:hidden;min-width:90px}
+.bar i{display:block;height:100%;background:var(--secondary)}
+
+.wiring{font-size:11.5px;color:var(--ink-2)}
+.wiring dt{font-weight:800;color:var(--ink);margin-top:10px;font-size:11px}
+.wiring dd{margin:2px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink-2);
+  background:var(--surface);border-radius:var(--r-sm);padding:4px 8px;border:var(--ghost)}
+
+.note{margin-top:20px;font-size:11px;color:var(--ink-3);font-style:italic}
+@media (max-width:1100px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="crumb">Kindred · Enrollment</div>
+<h1>Family journey</h1>
+<p class="sub">Every family, from first visit to first day. The teal river narrows where families fall out; each narrowing is a fixable leak. Counts under 12 show the actual families - at our scale, names beat bars.</p>
+
+<div class="controls">
+  <div class="seg">
+    <button>7d</button><button class="on">30d</button><button>90d</button><button>All</button>
+  </div>
+  <div class="seg">
+    <button class="on">All rooms</button><button>Infant</button><button>Toddler</button><button>Preschool</button>
+  </div>
+  <span class="chip-filter">Source: All · Google Ads · Organic · Walk-in</span>
+  <span class="chip-filter">Compare: previous 30d</span>
+</div>
+
+<div class="river-wrap">
+  <div class="river">
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Discover</div>
+        <div class="st-name">Site visitors</div>
+        <div class="st-src">page_views (D1)</div>
+      </div>
+      <div class="band"><div class="flow" style="height:100%"><span class="count">1.9k<small>visits</small></span></div></div>
+      <div class="conv sage">100% <span class="vs">baseline</span></div>
+      <div class="chips"><span class="more">volume stage - no names</span></div>
+      <div class="drip"><div class="dot">~</div><div class="lbl">bounce</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Engage</div>
+        <div class="st-name">Opened waitlist</div>
+        <div class="st-src">funnel_milestones: overlay_open</div>
+      </div>
+      <div class="band"><div class="flow" style="height:62%"><span class="count">214<small>families</small></span></div></div>
+      <div class="conv sage">11% <span class="vs">▲ vs 9%</span></div>
+      <div class="chips"><span class="more">volume stage - no names</span></div>
+      <div class="drip"><div class="dot">195</div><div class="lbl">left overlay</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Apply</div>
+        <div class="st-name">Application started</div>
+        <div class="st-src">applications + leads.furthest_step</div>
+      </div>
+      <div class="band"><div class="flow" style="height:34%"><span class="count">19<small>families</small></span></div></div>
+      <div class="conv sage">9% <span class="vs">▲ vs 6%</span></div>
+      <div class="chips">
+        <span class="chip ok">Pforsich <span class="d">7/21</span></span>
+        <span class="chip ok">Clark <span class="d">7/20</span></span>
+        <span class="chip ok">Rushworth <span class="d">7/14</span></span>
+        <span class="chip warm">Kuypers <span class="d">tour 7/23</span></span>
+        <span class="more">+15 more…</span>
+      </div>
+      <div class="drip"><div class="dot">4</div><div class="lbl">quit at pay</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Commit $65</div>
+        <div class="st-name">Fee paid · waiting</div>
+        <div class="st-src">applications.fee_paid=1</div>
+      </div>
+      <div class="band"><div class="flow" style="height:27%"><span class="count">15<small>families</small></span></div></div>
+      <div class="conv gold">79% <span class="vs">▼ vs 88%</span></div>
+      <div class="chips">
+        <span class="chip ok">Mercado <span class="d">overdue start</span></span>
+        <span class="chip ok">Muliar <span class="d">9/2</span></span>
+        <span class="chip ok">Drumheller <span class="d">8/1</span></span>
+        <span class="chip warm">Cramer <span class="d">toured 7/20</span></span>
+        <span class="more">+11 more…</span>
+      </div>
+      <div class="drip"><div class="dot">5</div><div class="lbl">no offer yet</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Offer</div>
+        <div class="st-name">Space offered</div>
+        <div class="st-src">offer_rounds + emails</div>
+      </div>
+      <div class="band"><div class="flow" style="height:19%"><span class="count">10<small>families</small></span></div></div>
+      <div class="conv sage">67% <span class="vs">— flat</span></div>
+      <div class="chips">
+        <span class="chip stuck">Rushworth ×2 <span class="d">held, silent 2d</span></span>
+        <span class="chip warm">Clark <span class="d">released 7/22</span></span>
+        <span class="more">+7 more…</span>
+      </div>
+      <div class="drip"><div class="dot">1</div><div class="lbl">signed, no pay</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Secure</div>
+        <div class="st-name">Signed + deposit</div>
+        <div class="st-src">secured_spaces (both timestamps)</div>
+      </div>
+      <div class="band"><div class="flow" style="height:15%"><span class="count">8<small>families</small></span></div></div>
+      <div class="conv sage">89% <span class="vs">▲ vs 75%</span></div>
+      <div class="chips">
+        <span class="chip ok">D. Castaneda <span class="d">8/3</span></span>
+        <span class="chip ok">Hubbard <span class="d">8/3</span></span>
+        <span class="chip ok">DeLano <span class="d">8/4</span></span>
+        <span class="chip ok">Sherwood <span class="d">9/8</span></span>
+        <span class="more">+4 more…</span>
+      </div>
+      <div class="drip"><div class="dot">0</div><div class="lbl">-</div></div>
+    </div>
+
+    <div class="station">
+      <div class="st-head">
+        <div class="st-eyebrow">Arrive</div>
+        <div class="st-name">Enrolled → first day</div>
+        <div class="st-src">children (Kindred, gated commit)</div>
+      </div>
+      <div class="band"><div class="flow thin" style="height:15%"><span class="count">8<small>committed</small></span></div></div>
+      <div class="conv gold">0 of 73 <span class="vs">packets complete</span></div>
+      <div class="chips">
+        <span class="chip stuck">S. Barnett <span class="d">no payer link</span></span>
+        <span class="chip warm">Galvin ×2 <span class="d">no agreement</span></span>
+        <span class="chip warm">TBD Brown/David <span class="d">nothing signed</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tray">
+    <h3>Released · expired · withdrawn (this window)</h3>
+    <div class="t-chips">
+      <span class="t-chip">Faye Clark <small>· signed, no deposit · released 7/22</small></span>
+      <span class="t-chip">N. Demchuk <small>· quit at pay 6/25</small></span>
+      <span class="t-chip">K. Kuypers <small>· quit at pay · touring 7/23</small></span>
+      <span class="t-chip">W. Moore <small>· quit at pay 7/9</small></span>
+      <span class="t-chip">E. Goodman <small>· quit at pay 7/1</small></span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <div class="panel">
+    <h2>Biggest leaks</h2>
+    <p class="ps">Ranked by drop RATE (min 5 entering), not headcount - so a small stage can't hide a broken step.</p>
+    <div class="leak">
+      <span class="rank">1</span>
+      <div class="what"><b>Application → fee payment</b><span>4 of 19 quit at the Stripe step; 1 self-recovered into a tour</span></div>
+      <span class="rate clay">-21%</span>
+      <span class="fix">post-tour nudge</span>
+    </div>
+    <div class="leak">
+      <span class="rank">2</span>
+      <div class="what"><b>Offer → secured</b><span>Clark signed but never paid; Rushworth holds silent 2 days</span></div>
+      <span class="rate gold">-20%</span>
+      <span class="fix">24h auto-release</span>
+    </div>
+    <div class="leak">
+      <span class="rank">3</span>
+      <div class="what"><b>Secured → paperwork done</b><span>0 of 73 activated packets final-approved; 3 families start in &lt;2 weeks</span></div>
+      <span class="rate gold">0%</span>
+      <span class="fix">packet chase</span>
+    </div>
+  </div>
+
+  <div class="panel cohort">
+    <h2>By source</h2>
+    <p class="ps">Same funnel, split by where the family came from. Pays for the ads honestly.</p>
+    <table>
+      <tr><th>Source</th><th>Apps</th><th>Secured</th><th>Rate</th></tr>
+      <tr><td>Google search</td><td class="n">9</td><td class="n">4</td><td><div class="bar"><i style="width:44%"></i></div></td></tr>
+      <tr><td>Google Ads</td><td class="n">6</td><td class="n">2</td><td><div class="bar"><i style="width:33%"></i></div></td></tr>
+      <tr><td>Walk-in / referral</td><td class="n">4</td><td class="n">2</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
+    </table>
+    <p class="ps" style="margin-top:12px">Click any row → filtered river.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Wiring</h2>
+    <p class="ps">Every number has exactly one owner. No stage is estimated.</p>
+    <dl class="wiring">
+      <dt>Visitors / overlay / steps</dt>
+      <dd>gm-waitlist D1: page_views, funnel_milestones</dd>
+      <dt>Applications + fee</dt>
+      <dd>applications (status, fee_paid_at, source)</dd>
+      <dt>Tours</dt>
+      <dd>tour_bookings (email-joined to applications)</dd>
+      <dt>Offers / sign / deposit</dt>
+      <dd>offer_rounds · signature_events · secured_spaces</dd>
+      <dt>Enrolled / first day / active</dt>
+      <dd>Solace API :8150 → children (Active/Enrolled), enrollment_items</dd>
+      <dt>Serve</dt>
+      <dd>GET /api/crm/journey?window=30d&room=all&source=all</dd>
+    </dl>
+  </div>
+
+</div>
+
+<p class="note">Wireframe v1 · numbers are today's verified audit values where known (apps, tours, secured, packets); traffic-stage values are illustrative until wired. Test/demo rows excluded by the same filter the canary uses.</p>
+
+</body>
+</html>
