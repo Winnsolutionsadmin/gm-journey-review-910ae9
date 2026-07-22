@@ -92,6 +92,20 @@ h1{font-family:'Newsreader',serif;font-weight:500;font-size:32px;margin:6px 0 2p
 .pill{font-size:10px;font-weight:800;border-radius:9999px;padding:2px 9px}
 .pill.live{background:var(--sage-wash);color:var(--sage-ink)}
 .pill.build{background:var(--gold-wash);color:var(--gold-ink)}
+/* per-family engagement ledger */
+.ledger td{white-space:nowrap}
+.ledger .fam{font-weight:700;font-size:12.5px}
+.ledger .fam small{display:block;font-weight:500;color:var(--ink-3);font-size:10px}
+.tl{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.ev{font-size:10px;font-weight:700;border-radius:9999px;padding:3px 9px;border:1px solid rgba(0,0,0,.08)}
+.ev.sent{background:var(--card);color:var(--ink-2)}
+.ev.open{background:var(--gold-wash);color:var(--gold-ink)}
+.ev.click{background:#DDEBED;color:var(--primary-dim)}
+.ev.tour{background:#E4E9F2;color:#3d5470}
+.ev.conv{background:var(--sage-wash);color:var(--sage-ink);border-color:rgba(111,143,112,.5)}
+.ev.rel{background:var(--clay-wash);color:var(--clay)}
+.ev.cold{background:var(--paper-2);color:var(--ink-3)}
+.arrow{color:var(--ink-3);font-size:10px}
 </style>
 </head>
 <body>
@@ -315,6 +329,60 @@ h1{font-family:'Newsreader',serif;font-weight:500;font-size:32px;margin:6px 0 2p
   </ul>
 </li>
 </ul>
+</div>
+
+<div class="section ledger">
+  <h2>Per-family engagement ledger (live rows from campaign_sends + tour ⋈ secured)</h2>
+  <p class="ps" style="font-size:12px;color:var(--ink-3);margin-bottom:12px">Every email a family received, whether a human opened it, what they clicked, and the branch that converted them. In Kindred: click any family chip in the tree → this ledger filtered to them; click any campaign → its wave. Open counts are raw; the human filter (build #5) will discount proxy/scanner opens.</p>
+  <table>
+    <tr><th>Family</th><th>Journey (real events)</th><th>Outcome</th></tr>
+    <tr>
+      <td class="fam">Daniel Castaneda<small>toddler · tier 4</small></td>
+      <td><div class="tl"><span class="ev sent">reserve-early-access 7/10</span><span class="arrow">→</span><span class="ev open">opened ×26</span><span class="arrow">→</span><span class="ev click">clicked ×8 (Windows)</span><span class="arrow">→</span><span class="ev tour">toured 7/15</span><span class="arrow">→</span><span class="ev conv">deposit 7/16</span></div></td>
+      <td><span class="ev conv">CONVERTED via email → tour → secure</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Julian Castaneda<small>young preschool · tier 4</small></td>
+      <td><div class="tl"><span class="ev sent">reserve-early-access 7/10</span><span class="arrow">→</span><span class="ev open">opened ×27</span><span class="arrow">→</span><span class="ev click">clicked ×10 (Mac)</span><span class="arrow">→</span><span class="ev conv">deposit 7/14</span></div></td>
+      <td><span class="ev conv">CONVERTED via email click → portal</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Äma Caveto (Addy)<small>infant</small></td>
+      <td><div class="tl"><span class="ev sent">reserve-early-access 7/10</span><span class="arrow">→</span><span class="ev open">opened ×31 (iPhone)</span><span class="arrow">→</span><span class="ev click">clicked ×3</span><span class="arrow">→</span><span class="ev tour">toured 7/13</span></div></td>
+      <td><span class="ev open">WARM - toured, no application yet</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Faye Clark<small>preschool · tier 2 VIP</small></td>
+      <td><div class="tl"><span class="ev tour">signed agreement 7/20</span><span class="arrow">→</span><span class="ev rel">no deposit 48h</span><span class="arrow">→</span><span class="ev sent">release email 7/22 (msg 19f8bb9e...)</span></div></td>
+      <td><span class="ev rel">RELEASED - waitlist position kept</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Nikolai Demchuk<small>infant · tier 2 state</small></td>
+      <td><div class="tl"><span class="ev cold">quit at pay 6/25</span><span class="arrow">→</span><span class="ev sent">open-enrollment-free 7/22 ✓delivered</span><span class="arrow">→</span><span class="ev cold">awaiting open</span></div></td>
+      <td><span class="ev open">RECOVERY IN FLIGHT</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Weston Moore<small>toddler</small></td>
+      <td><div class="tl"><span class="ev cold">quit at pay 7/9</span><span class="arrow">→</span><span class="ev sent">open-enrollment-free 7/22 ✓delivered</span><span class="arrow">→</span><span class="ev cold">awaiting open</span></div></td>
+      <td><span class="ev open">RECOVERY IN FLIGHT</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Evan Goodman<small>infant</small></td>
+      <td><div class="tl"><span class="ev cold">quit at pay 7/1</span><span class="arrow">→</span><span class="ev sent">open-enrollment-free 7/22 ✓delivered</span><span class="arrow">→</span><span class="ev cold">awaiting open</span></div></td>
+      <td><span class="ev open">RECOVERY IN FLIGHT</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Katie Hanrahan (Kieran)<small>infant</small></td>
+      <td><div class="tl"><span class="ev cold">quit at pay 7/8</span><span class="arrow">→</span><span class="ev tour">self-booked tour 7/23 3pm</span><span class="arrow">→</span><span class="ev cold">pay after tour?</span></div></td>
+      <td><span class="ev tour">TOURING TOMORROW</span></td>
+    </tr>
+    <tr>
+      <td class="fam">Elowyn Goldman<small>waitlisted</small></td>
+      <td><div class="tl"><span class="ev sent">reserve-early-access 7/10</span><span class="arrow">→</span><span class="ev cold">never opened</span></div></td>
+      <td><span class="ev cold">COLD - candidate for resend/winback</span></td>
+    </tr>
+  </table>
+  <p class="ps" style="font-size:11px;color:var(--ink-3);margin-top:10px;font-style:italic">Attribution rule: CONVERTED = secured_spaces row exists; credited branch = last tracked touch (click / tour) before deposit_paid_at. Wired from campaign_sends (sent/opened/clicked + UA), tour_bookings, secured_spaces - all live today; the 7/22 rows above update as opens land.</p>
 </div>
 
 <div class="section">
