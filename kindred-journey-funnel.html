@@ -4,331 +4,334 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kindred - Family Journey (wireframe v1)</title>
+<title>Kindred - Family Journey flowchart (wireframe v2)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   Kindred Journey wireframe - uses the LIVE portal token system
-   (src/index.css, zen refit 2026-07-14). Status vocabulary:
-   sage = clear/confirmed · teal = worth knowing · gold = needs
-   attention · clay = critical. No gray chrome, no siren red.
-   ============================================================ */
+/* Kindred Journey FLOWCHART wireframe v2 - literal branching decision tree.
+   Live portal token system (zen refit 2026-07-14): sage=clear/confirmed,
+   teal=worth knowing, gold=needs attention, clay=critical. */
 :root{
-  --surface:#FBF7EE; --paper-2:#F0E9D8; --card:#FFFDF9;
-  --primary:#3D8189; --primary-dim:#2F6B72; --on-primary:#fff;
-  --secondary:#6F8F70; --secondary-container:#DCE7DA; --on-secondary-container:#1a3a1a;
-  --tertiary-deep:#B08D4C; --tertiary-container:#EEDFC4; --on-tertiary-container:#3d2e1a;
-  --sage-wash:#E6EDE2; --gold-wash:#F2E7D0; --critical:#A8503C; --critical-wash:#F4E2DB;
-  --ink:#1F2A2E; --ink-2:#3F5359; --ink-3:#6F7F84;
-  --outline:#DCD2BB; --ghost:1px solid rgba(176,166,138,.28);
-  --shadow-soft:0 12px 34px rgba(49,51,51,.06); --shadow-lift:0 20px 60px rgba(49,51,51,.10);
-  --r-card:12px; --r-sm:6px; --r-full:9999px;
+  --surface:#FBF7EE;--paper-2:#F0E9D8;--card:#FFFDF9;
+  --primary:#3D8189;--primary-dim:#2F6B72;
+  --sage:#6F8F70;--sage-wash:#E6EDE2;--sage-ink:#1a3a1a;
+  --gold:#B08D4C;--gold-wash:#F2E7D0;--gold-ink:#3d2e1a;
+  --clay:#A8503C;--clay-wash:#F4E2DB;
+  --ink:#1F2A2E;--ink-2:#3F5359;--ink-3:#6F7F84;
+  --outline:#DCD2BB;--ghost:1px solid rgba(176,166,138,.28);
+  --shadow:0 12px 34px rgba(49,51,51,.06);
+  --line:#B9AE93;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Manrope',sans-serif;background:var(--surface);color:var(--ink);
-  -webkit-font-smoothing:antialiased;padding:28px 32px 64px;min-height:100vh}
-
-/* ---------- header ---------- */
+  padding:28px 24px 80px;-webkit-font-smoothing:antialiased;overflow-x:auto}
 .crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
-h1{font-family:'Newsreader',serif;font-weight:500;font-size:34px;margin:6px 0 2px}
-.sub{font-size:13px;color:var(--ink-2);max-width:64ch}
-.controls{display:flex;gap:8px;margin:18px 0 26px;flex-wrap:wrap}
-.seg{display:inline-flex;background:var(--paper-2);border-radius:var(--r-full);padding:3px;border:var(--ghost)}
-.seg button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--ink-2);
-  padding:6px 14px;border-radius:var(--r-full);cursor:pointer}
-.seg button.on{background:var(--card);color:var(--primary-dim);box-shadow:var(--shadow-soft)}
-.chip-filter{font-size:12px;font-weight:600;color:var(--ink-2);background:var(--card);border:var(--ghost);
-  border-radius:var(--r-full);padding:8px 14px}
+h1{font-family:'Newsreader',serif;font-weight:500;font-size:32px;margin:6px 0 2px}
+.sub{font-size:13px;color:var(--ink-2);max-width:74ch}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:16px 0 30px;font-size:11px;font-weight:700;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.k{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.12)}
+.k.state{background:var(--card)} .k.decision{background:#fff;border:2px solid var(--primary);transform:rotate(45deg);width:11px;height:11px;border-radius:2px}
+.k.email{background:var(--gold-wash)} .k.win{background:var(--sage-wash)} .k.lost{background:var(--clay-wash)}
+.k.dashed{background:var(--card);border:1.5px dashed var(--gold)}
 
-/* ---------- the river (signature element) ----------
-   Families flow left -> right. Each stage is a station; the teal band's
-   height encodes how many families survive to that stage. Losses drip
-   DOWN from the gap between stations into the release tray. */
-.river-wrap{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-soft);
-  border:var(--ghost);padding:26px 26px 18px;overflow-x:auto}
-.river{display:grid;grid-template-columns:repeat(7,minmax(128px,1fr));gap:0;min-width:960px}
-.station{position:relative;padding:0 10px}
-.station + .station{border-left:1px dashed var(--outline)}
-.st-head{min-height:58px}
-.st-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--ink-3)}
-.st-name{font-size:14px;font-weight:700;color:var(--ink);margin-top:2px}
-.st-src{font-size:10px;color:var(--ink-3);margin-top:2px;font-style:italic}
-.band{position:relative;height:170px;display:flex;align-items:flex-end;margin-top:8px}
-.band .flow{width:100%;background:linear-gradient(180deg,#4E969E, var(--primary));
-  border-radius:8px 8px 3px 3px;position:relative;transition:height .5s ease}
-.band .flow.thin{background:linear-gradient(180deg,#8AB6BB,#6FA3AA)}
-.count{position:absolute;top:-30px;left:0;font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:var(--ink)}
-.count small{font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;margin-left:4px}
-.conv{margin:10px 0 4px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;
-  border-radius:var(--r-full);padding:4px 10px}
-.conv.sage{background:var(--sage-wash);color:var(--on-secondary-container)}
-.conv.gold{background:var(--gold-wash);color:var(--on-tertiary-container)}
-.conv.clay{background:var(--critical-wash);color:var(--critical)}
-.conv .vs{font-weight:600;color:inherit;opacity:.7;font-size:10px}
+/* ---------- tree flowchart ---------- */
+.tree{min-width:1240px}
+.tree ul{display:flex;justify-content:center;padding-top:26px;position:relative}
+.tree ul::before{content:'';position:absolute;top:0;left:50%;width:1.5px;height:26px;background:var(--line)}
+.tree>ul::before{display:none}
+.tree li{list-style:none;position:relative;padding:26px 10px 0;display:flex;flex-direction:column;align-items:center}
+.tree li::before,.tree li::after{content:'';position:absolute;top:0;height:26px;width:50%;border-top:1.5px solid var(--line)}
+.tree li::before{left:0;border-right:1.5px solid var(--line);transform:translateX(.75px)}
+.tree li::after{right:0}
+.tree li:first-child::before{border-top:0}
+.tree li:first-child::after{border-radius:0 6px 0 0}
+.tree li:last-child::after{border-top:0;border-right:1.5px solid var(--line);right:auto;left:50%;transform:translateX(-.75px)}
+.tree li:last-child::before{border-right:0;border-radius:0}
+.tree li:first-child:last-child::before,.tree li:first-child:last-child::after{display:none}
+.tree li:first-child:last-child{padding-top:26px}
+.tree li:first-child:last-child>ul::before{height:26px}
+.tree>ul>li{padding-top:0}
+.tree>ul>li::before,.tree>ul>li::after{display:none}
 
-/* the drip: families lost between this station and the next */
-.drip{position:absolute;right:-11px;bottom:-44px;width:22px;text-align:center;z-index:2}
-.drip .dot{width:22px;height:22px;border-radius:50%;background:var(--critical-wash);color:var(--critical);
-  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto;
-  border:1px solid rgba(168,80,60,.25)}
-.drip .lbl{font-size:9px;color:var(--ink-3);margin-top:2px;white-space:nowrap}
+/* edge labels (yes/no/%) */
+.edge{position:absolute;top:2px;font-size:10px;font-weight:800;letter-spacing:.06em;
+  background:var(--surface);padding:1px 7px;border-radius:9999px;border:var(--ghost);z-index:2;color:var(--ink-2)}
+.edge.yes{color:var(--sage-ink);background:var(--sage-wash)}
+.edge.no{color:var(--clay);background:var(--clay-wash)}
 
-/* names, not bars: at GM scale every family below ~12 is a chip */
-.chips{margin-top:14px;display:flex;flex-direction:column;gap:4px;min-height:120px}
-.chip{font-size:11px;font-weight:600;background:var(--surface);border:var(--ghost);border-radius:var(--r-sm);
-  padding:4px 8px;color:var(--ink-2);display:flex;justify-content:space-between;gap:6px;cursor:pointer}
-.chip:hover{background:var(--sage-wash)}
-.chip .d{color:var(--ink-3);font-weight:500;font-size:10px}
-.chip.warm{border-left:3px solid var(--tertiary-deep)}
-.chip.stuck{border-left:3px solid var(--critical)}
-.chip.ok{border-left:3px solid var(--secondary)}
-.more{font-size:10px;color:var(--primary-dim);font-weight:700;padding:2px 0;cursor:pointer}
-
-/* ---------- release tray ---------- */
-.tray{margin-top:54px;background:var(--surface);border:1px dashed var(--outline);border-radius:var(--r-card);
-  padding:16px 20px}
-.tray h3{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--critical);font-weight:800}
-.tray .t-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.t-chip{font-size:11px;font-weight:600;background:var(--critical-wash);color:var(--critical);
-  border-radius:var(--r-sm);padding:5px 10px}
-.t-chip small{opacity:.75;font-weight:500}
-
-/* ---------- lower grid: leaks + cohort + wiring ---------- */
-.grid{display:grid;grid-template-columns:1.15fr .95fr 1fr;gap:18px;margin-top:22px}
-.panel{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-soft);border:var(--ghost);padding:20px 22px}
-.panel h2{font-family:'Newsreader',serif;font-size:19px;font-weight:600;margin-bottom:4px}
-.panel .ps{font-size:12px;color:var(--ink-3);margin-bottom:14px}
-.leak{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(0,0,0,.05)}
-.leak:first-of-type{border-top:0}
-.leak .rank{font-family:'Newsreader',serif;font-size:20px;color:var(--ink-3);width:20px}
-.leak .what{flex:1}
-.leak .what b{font-size:13px;display:block}
-.leak .what span{font-size:11px;color:var(--ink-2)}
-.leak .rate{font-size:15px;font-weight:800}
-.leak .rate.clay{color:var(--critical)} .leak .rate.gold{color:var(--tertiary-deep)} .leak .rate.sage{color:var(--secondary)}
-.fix{font-size:11px;background:var(--sage-wash);color:var(--on-secondary-container);border-radius:var(--r-sm);
-  padding:3px 8px;font-weight:700;white-space:nowrap}
-
-/* cohort strip: source rows x outcome */
-.cohort table{width:100%;border-collapse:collapse;font-size:12px}
-.cohort th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:6px 4px;font-weight:800}
-.cohort td{padding:7px 4px;border-top:1px solid rgba(0,0,0,.05)}
-.cohort td.n{font-weight:700}
-.bar{height:8px;border-radius:4px;background:var(--paper-2);overflow:hidden;min-width:90px}
-.bar i{display:block;height:100%;background:var(--secondary)}
-
-.wiring{font-size:11.5px;color:var(--ink-2)}
-.wiring dt{font-weight:800;color:var(--ink);margin-top:10px;font-size:11px}
-.wiring dd{margin:2px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink-2);
-  background:var(--surface);border-radius:var(--r-sm);padding:4px 8px;border:var(--ghost)}
-
-.note{margin-top:20px;font-size:11px;color:var(--ink-3);font-style:italic}
-@media (max-width:1100px){.grid{grid-template-columns:1fr}}
+/* nodes */
+.node{background:var(--card);border:var(--ghost);border-radius:10px;box-shadow:var(--shadow);
+  padding:10px 14px;text-align:center;min-width:150px;max-width:212px;position:relative;z-index:1}
+.node .eyebrow{font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--ink-3)}
+.node .t{font-size:12.5px;font-weight:700;margin-top:1px;line-height:1.25}
+.node .n{font-family:'Newsreader',serif;font-size:21px;font-weight:600;margin-top:2px}
+.node .n small{font-family:'Manrope';font-size:9px;font-weight:700;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase}
+.node .src{font-size:9px;color:var(--ink-3);font-style:italic;margin-top:3px}
+.node .names{margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.node .names i{font-style:normal;font-size:10px;font-weight:600;color:var(--ink-2);background:var(--surface);
+  border-radius:4px;padding:1px 6px;border:var(--ghost)}
+.node.decision{border:2px solid var(--primary);background:#fff}
+.node.decision .t{color:var(--primary-dim)}
+.node.email{background:var(--gold-wash);border-color:rgba(176,141,76,.4)}
+.node.email .eyebrow{color:var(--gold)}
+.node.win{background:var(--sage-wash);border-color:rgba(111,143,112,.45)}
+.node.lost{background:var(--clay-wash);border-color:rgba(168,80,60,.35)}
+.node.lost .t{color:var(--clay)}
+.node.dashed{border:1.5px dashed var(--gold);background:#FFFDF6}
+.node.dashed .eyebrow{color:var(--gold)}
+.badge-new{position:absolute;top:-9px;right:-9px;background:var(--gold);color:#fff;font-size:9px;
+  font-weight:800;letter-spacing:.08em;border-radius:9999px;padding:3px 8px}
+.note{margin-top:26px;font-size:11px;color:var(--ink-3);font-style:italic;max-width:90ch}
+.section{margin-top:34px;background:var(--card);border:var(--ghost);border-radius:12px;box-shadow:var(--shadow);padding:18px 22px;max-width:1240px}
+.section h2{font-family:'Newsreader',serif;font-size:19px;font-weight:600;margin-bottom:10px}
+.section table{width:100%;border-collapse:collapse;font-size:12px}
+.section th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:6px 8px;font-weight:800}
+.section td{padding:7px 8px;border-top:1px solid rgba(0,0,0,.05);vertical-align:top}
+.section td code{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:var(--surface);border-radius:4px;padding:1px 6px}
+.pill{font-size:10px;font-weight:800;border-radius:9999px;padding:2px 9px}
+.pill.live{background:var(--sage-wash);color:var(--sage-ink)}
+.pill.build{background:var(--gold-wash);color:var(--gold-ink)}
 </style>
 </head>
 <body>
 
 <div class="crumb">Kindred · Enrollment</div>
-<h1>Family journey</h1>
-<p class="sub">Every family, from first visit to first day. The teal river narrows where families fall out; each narrowing is a fixable leak. Counts under 12 show the actual families - at our scale, names beat bars.</p>
+<h1>Family journey - the branching flowchart</h1>
+<p class="sub">Every path a family can take, with live counts on each node and each branch labeled yes/no. Diamond-border = decision read from data · gold = an email we send · dashed = automation that doesn't exist yet (build list below) · sage = converted · clay = lost/released. Counts under ~8 show the actual families.</p>
 
-<div class="controls">
-  <div class="seg">
-    <button>7d</button><button class="on">30d</button><button>90d</button><button>All</button>
-  </div>
-  <div class="seg">
-    <button class="on">All rooms</button><button>Infant</button><button>Toddler</button><button>Preschool</button>
-  </div>
-  <span class="chip-filter">Source: All · Google Ads · Organic · Walk-in</span>
-  <span class="chip-filter">Compare: previous 30d</span>
+<div class="legend">
+  <span><i class="k state"></i> state (count)</span>
+  <span><i class="k decision"></i> decision (from data)</span>
+  <span><i class="k email"></i> email touch</span>
+  <span><i class="k dashed"></i> NOT BUILT yet</span>
+  <span><i class="k win"></i> converted</span>
+  <span><i class="k lost"></i> lost / released</span>
 </div>
 
-<div class="river-wrap">
-  <div class="river">
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Discover</div>
-        <div class="st-name">Site visitors</div>
-        <div class="st-src">page_views (D1)</div>
-      </div>
-      <div class="band"><div class="flow" style="height:100%"><span class="count">1.9k<small>visits</small></span></div></div>
-      <div class="conv sage">100% <span class="vs">baseline</span></div>
-      <div class="chips"><span class="more">volume stage - no names</span></div>
-      <div class="drip"><div class="dot">~</div><div class="lbl">bounce</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Engage</div>
-        <div class="st-name">Opened waitlist</div>
-        <div class="st-src">funnel_milestones: overlay_open</div>
-      </div>
-      <div class="band"><div class="flow" style="height:62%"><span class="count">214<small>families</small></span></div></div>
-      <div class="conv sage">11% <span class="vs">▲ vs 9%</span></div>
-      <div class="chips"><span class="more">volume stage - no names</span></div>
-      <div class="drip"><div class="dot">195</div><div class="lbl">left overlay</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Apply</div>
-        <div class="st-name">Application started</div>
-        <div class="st-src">applications + leads.furthest_step</div>
-      </div>
-      <div class="band"><div class="flow" style="height:34%"><span class="count">19<small>families</small></span></div></div>
-      <div class="conv sage">9% <span class="vs">▲ vs 6%</span></div>
-      <div class="chips">
-        <span class="chip ok">Pforsich <span class="d">7/21</span></span>
-        <span class="chip ok">Clark <span class="d">7/20</span></span>
-        <span class="chip ok">Rushworth <span class="d">7/14</span></span>
-        <span class="chip warm">Kuypers <span class="d">tour 7/23</span></span>
-        <span class="more">+15 more…</span>
-      </div>
-      <div class="drip"><div class="dot">4</div><div class="lbl">quit at pay</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Commit $65</div>
-        <div class="st-name">Fee paid · waiting</div>
-        <div class="st-src">applications.fee_paid=1</div>
-      </div>
-      <div class="band"><div class="flow" style="height:27%"><span class="count">15<small>families</small></span></div></div>
-      <div class="conv gold">79% <span class="vs">▼ vs 88%</span></div>
-      <div class="chips">
-        <span class="chip ok">Mercado <span class="d">overdue start</span></span>
-        <span class="chip ok">Muliar <span class="d">9/2</span></span>
-        <span class="chip ok">Drumheller <span class="d">8/1</span></span>
-        <span class="chip warm">Cramer <span class="d">toured 7/20</span></span>
-        <span class="more">+11 more…</span>
-      </div>
-      <div class="drip"><div class="dot">5</div><div class="lbl">no offer yet</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Offer</div>
-        <div class="st-name">Space offered</div>
-        <div class="st-src">offer_rounds + emails</div>
-      </div>
-      <div class="band"><div class="flow" style="height:19%"><span class="count">10<small>families</small></span></div></div>
-      <div class="conv sage">67% <span class="vs">— flat</span></div>
-      <div class="chips">
-        <span class="chip stuck">Rushworth ×2 <span class="d">held, silent 2d</span></span>
-        <span class="chip warm">Clark <span class="d">released 7/22</span></span>
-        <span class="more">+7 more…</span>
-      </div>
-      <div class="drip"><div class="dot">1</div><div class="lbl">signed, no pay</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Secure</div>
-        <div class="st-name">Signed + deposit</div>
-        <div class="st-src">secured_spaces (both timestamps)</div>
-      </div>
-      <div class="band"><div class="flow" style="height:15%"><span class="count">8<small>families</small></span></div></div>
-      <div class="conv sage">89% <span class="vs">▲ vs 75%</span></div>
-      <div class="chips">
-        <span class="chip ok">D. Castaneda <span class="d">8/3</span></span>
-        <span class="chip ok">Hubbard <span class="d">8/3</span></span>
-        <span class="chip ok">DeLano <span class="d">8/4</span></span>
-        <span class="chip ok">Sherwood <span class="d">9/8</span></span>
-        <span class="more">+4 more…</span>
-      </div>
-      <div class="drip"><div class="dot">0</div><div class="lbl">-</div></div>
-    </div>
-
-    <div class="station">
-      <div class="st-head">
-        <div class="st-eyebrow">Arrive</div>
-        <div class="st-name">Enrolled → first day</div>
-        <div class="st-src">children (Kindred, gated commit)</div>
-      </div>
-      <div class="band"><div class="flow thin" style="height:15%"><span class="count">8<small>committed</small></span></div></div>
-      <div class="conv gold">0 of 73 <span class="vs">packets complete</span></div>
-      <div class="chips">
-        <span class="chip stuck">S. Barnett <span class="d">no payer link</span></span>
-        <span class="chip warm">Galvin ×2 <span class="d">no agreement</span></span>
-        <span class="chip warm">TBD Brown/David <span class="d">nothing signed</span></span>
-      </div>
-    </div>
-
+<div class="tree">
+<ul>
+<li>
+  <div class="node">
+    <div class="eyebrow">Start · last 30d</div>
+    <div class="t">Application started</div>
+    <div class="n">19 <small>families</small></div>
+    <div class="src">applications + leads.furthest_step</div>
   </div>
-
-  <div class="tray">
-    <h3>Released · expired · withdrawn (this window)</h3>
-    <div class="t-chips">
-      <span class="t-chip">Faye Clark <small>· signed, no deposit · released 7/22</small></span>
-      <span class="t-chip">N. Demchuk <small>· quit at pay 6/25</small></span>
-      <span class="t-chip">K. Kuypers <small>· quit at pay · touring 7/23</small></span>
-      <span class="t-chip">W. Moore <small>· quit at pay 7/9</small></span>
-      <span class="t-chip">E. Goodman <small>· quit at pay 7/1</small></span>
+  <ul>
+  <li>
+    <div class="node decision">
+      <div class="eyebrow">Decision</div>
+      <div class="t">$65 payment display shown - accepted?</div>
+      <div class="src">stripe_session vs fee_paid_at</div>
     </div>
-  </div>
+    <ul>
+      <!-- ============ ACCEPTED BRANCH ============ -->
+      <li>
+        <span class="edge yes">PAID · 15 (79%)</span>
+        <div class="node win">
+          <div class="eyebrow">Waitlisted</div>
+          <div class="t">Position held</div>
+          <div class="n">15</div>
+          <div class="src">status=waiting · fee_paid=1</div>
+        </div>
+        <ul>
+        <li>
+          <div class="node decision">
+            <div class="eyebrow">Decision</div>
+            <div class="t">Tour booked?</div>
+            <div class="src">tour_bookings ⋈ email</div>
+          </div>
+          <ul>
+            <li>
+              <span class="edge yes">YES · 4</span>
+              <div class="node decision">
+                <div class="eyebrow">Decision</div>
+                <div class="t">Tour attended?</div>
+                <div class="src">assume YES unless no-show flagged</div>
+                <div class="names"><i>Pforsich 7/28</i><i>Cramer ✓7/20</i><i>Barcellos ✓7/15</i><i>Addy ✓7/13</i></div>
+              </div>
+              <ul>
+                <li>
+                  <span class="edge yes">ATTENDED</span>
+                  <div class="node decision">
+                    <div class="eyebrow">Decision · when space opens</div>
+                    <div class="t">Offer → agreement signed?</div>
+                    <div class="src">offer email ⋈ signature_events</div>
+                  </div>
+                  <ul>
+                    <li>
+                      <span class="edge yes">SIGNED · 9</span>
+                      <div class="node decision">
+                        <div class="eyebrow">Decision</div>
+                        <div class="t">Deposit paid within 24h?</div>
+                        <div class="src">secured_spaces.deposit_paid_at</div>
+                      </div>
+                      <ul>
+                        <li>
+                          <span class="edge yes">PAID · 8 (89%)</span>
+                          <div class="node win">
+                            <div class="eyebrow">Converted</div>
+                            <div class="t">SECURED → packet → first day</div>
+                            <div class="n">8</div>
+                            <div class="names"><i>D.Castaneda 8/3</i><i>Hubbard 8/3</i><i>DeLano 8/4</i><i>+5 more</i></div>
+                          </div>
+                        </li>
+                        <li>
+                          <span class="edge no">NOT PAID · 1</span>
+                          <div class="node email dashed">
+                            <span class="badge-new">BUILD</span>
+                            <div class="eyebrow">Auto · 24h</div>
+                            <div class="t">Release + "Hopefully next time!" email</div>
+                            <div class="src">hold released · stays on waitlist</div>
+                            <div class="names"><i>Faye Clark (manual today)</i></div>
+                          </div>
+                          <ul><li>
+                            <div class="node lost">
+                              <div class="eyebrow">Outcome</div>
+                              <div class="t">Space released · waitlist position kept</div>
+                              <div class="n">1</div>
+                            </div>
+                          </li></ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="edge no">NOT SIGNED</span>
+                      <div class="node email dashed">
+                        <span class="badge-new">BUILD</span>
+                        <div class="eyebrow">Auto · 48h</div>
+                        <div class="t">Signature reminder → then release</div>
+                        <div class="names"><i>Rushworth ×2 silent 2d</i></div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="edge no">NO-SHOW</span>
+                  <div class="node email dashed">
+                    <span class="badge-new">BUILD</span>
+                    <div class="eyebrow">Auto · same day</div>
+                    <div class="t">"We missed you" rebook email</div>
+                    <div class="src">needs no-show flag in tour_bookings</div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <span class="edge no">NO TOUR · 11</span>
+              <div class="node email">
+                <div class="eyebrow">Live today</div>
+                <div class="t">Tour invite email</div>
+                <div class="src">tour_invites (/t/ token)</div>
+              </div>
+              <ul>
+                <li>
+                  <div class="node decision dashed">
+                    <div class="eyebrow">Decision</div>
+                    <div class="t">Opened (real human)? Clicked? Booked?</div>
+                    <div class="src">needs open pixel + bot filter + click log</div>
+                  </div>
+                  <ul>
+                    <li><span class="edge yes">BOOKED</span>
+                      <div class="node"><div class="t">→ joins tour branch above</div></div>
+                    </li>
+                    <li><span class="edge no">NO BOOKING in 2-3d</span>
+                      <div class="node email">
+                        <div class="eyebrow">Nudge</div>
+                        <div class="t">Reminder → offer a call with founder</div>
+                        <div class="src">manual today (Jarred's 7/14 pattern)</div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        </ul>
+      </li>
+
+      <!-- ============ DECLINED / EXITED BRANCH ============ -->
+      <li>
+        <span class="edge no">EXITED · 4 (21%)</span>
+        <div class="node lost">
+          <div class="eyebrow">Leak #1</div>
+          <div class="t">Quit at the payment display</div>
+          <div class="n">4</div>
+          <div class="src">status=pending_payment</div>
+          <div class="names"><i>Demchuk 6/25</i><i>Kuypers 7/8</i><i>Moore 7/9</i><i>Goodman 7/1</i></div>
+        </div>
+        <ul>
+        <li>
+          <div class="node email dashed">
+            <span class="badge-new">BUILD</span>
+            <div class="eyebrow">Auto · +24h, +72h</div>
+            <div class="t">Payment-recovery reminder emails</div>
+            <div class="src">leads rail exists (winback_b1) - not wired to this branch</div>
+          </div>
+          <ul>
+          <li>
+            <div class="node decision dashed">
+              <div class="eyebrow">Decision</div>
+              <div class="t">Opened (real human)? Clicked? Booked a tour?</div>
+              <div class="src">needs open pixel + bot filter (Apple proxy-opens excluded)</div>
+            </div>
+            <ul>
+              <li>
+                <span class="edge yes">BOOKED TOUR · 1</span>
+                <div class="node">
+                  <div class="eyebrow">Self-recovered</div>
+                  <div class="t">Tour attended (assume yes) → pay after tour?</div>
+                  <div class="names"><i>Kuypers/Hanrahan · tour 7/23 3pm</i></div>
+                </div>
+              </li>
+              <li>
+                <span class="edge no">NO TOUR in 2-3d · 3</span>
+                <div class="node email dashed">
+                  <span class="badge-new">BUILD</span>
+                  <div class="eyebrow">Auto · day 3</div>
+                  <div class="t">OPEN ENROLLMENT offer - free waitlist this week</div>
+                  <div class="src">CTA → growingmindfully.org/lp/open-enrollment (live page) + waiver code</div>
+                  <div class="names"><i>Demchuk</i><i>Moore</i><i>Goodman</i></div>
+                </div>
+                <ul>
+                  <li><span class="edge yes">APPLIED FREE</span>
+                    <div class="node win"><div class="t">→ Waitlisted (position held)</div></div>
+                  </li>
+                  <li><span class="edge no">SILENT</span>
+                    <div class="node lost"><div class="t">Cold → monthly winback rail</div><div class="src">leads.winback_b1_sent_at (live)</div></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          </ul>
+        </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  </ul>
+</li>
+</ul>
 </div>
 
-<div class="grid">
-
-  <div class="panel">
-    <h2>Biggest leaks</h2>
-    <p class="ps">Ranked by drop RATE (min 5 entering), not headcount - so a small stage can't hide a broken step.</p>
-    <div class="leak">
-      <span class="rank">1</span>
-      <div class="what"><b>Application → fee payment</b><span>4 of 19 quit at the Stripe step; 1 self-recovered into a tour</span></div>
-      <span class="rate clay">-21%</span>
-      <span class="fix">post-tour nudge</span>
-    </div>
-    <div class="leak">
-      <span class="rank">2</span>
-      <div class="what"><b>Offer → secured</b><span>Clark signed but never paid; Rushworth holds silent 2 days</span></div>
-      <span class="rate gold">-20%</span>
-      <span class="fix">24h auto-release</span>
-    </div>
-    <div class="leak">
-      <span class="rank">3</span>
-      <div class="what"><b>Secured → paperwork done</b><span>0 of 73 activated packets final-approved; 3 families start in &lt;2 weeks</span></div>
-      <span class="rate gold">0%</span>
-      <span class="fix">packet chase</span>
-    </div>
-  </div>
-
-  <div class="panel cohort">
-    <h2>By source</h2>
-    <p class="ps">Same funnel, split by where the family came from. Pays for the ads honestly.</p>
-    <table>
-      <tr><th>Source</th><th>Apps</th><th>Secured</th><th>Rate</th></tr>
-      <tr><td>Google search</td><td class="n">9</td><td class="n">4</td><td><div class="bar"><i style="width:44%"></i></div></td></tr>
-      <tr><td>Google Ads</td><td class="n">6</td><td class="n">2</td><td><div class="bar"><i style="width:33%"></i></div></td></tr>
-      <tr><td>Walk-in / referral</td><td class="n">4</td><td class="n">2</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
-    </table>
-    <p class="ps" style="margin-top:12px">Click any row → filtered river.</p>
-  </div>
-
-  <div class="panel">
-    <h2>Wiring</h2>
-    <p class="ps">Every number has exactly one owner. No stage is estimated.</p>
-    <dl class="wiring">
-      <dt>Visitors / overlay / steps</dt>
-      <dd>gm-waitlist D1: page_views, funnel_milestones</dd>
-      <dt>Applications + fee</dt>
-      <dd>applications (status, fee_paid_at, source)</dd>
-      <dt>Tours</dt>
-      <dd>tour_bookings (email-joined to applications)</dd>
-      <dt>Offers / sign / deposit</dt>
-      <dd>offer_rounds · signature_events · secured_spaces</dd>
-      <dt>Enrolled / first day / active</dt>
-      <dd>Solace API :8150 → children (Active/Enrolled), enrollment_items</dd>
-      <dt>Serve</dt>
-      <dd>GET /api/crm/journey?window=30d&room=all&source=all</dd>
-    </dl>
-  </div>
-
+<div class="section">
+  <h2>Build list (dashed nodes) - what turns this chart fully live</h2>
+  <table>
+    <tr><th>#</th><th>Automation</th><th>Trigger</th><th>Status</th></tr>
+    <tr><td>1</td><td>Payment-recovery reminders (+24h/+72h)</td><td><code>pending_payment</code> and no fee_paid</td><td><span class="pill build">BUILD</span></td></tr>
+    <tr><td>2</td><td>Open-enrollment offer: free waitlist this week</td><td>no tour booked 2-3d after recovery emails</td><td><span class="pill build">BUILD</span> lp page is <span class="pill live">LIVE</span></td></tr>
+    <tr><td>3</td><td>24h signed-no-payment auto-release + "Hopefully next time!"</td><td><code>agreement_signed_at</code> + no deposit 24h</td><td><span class="pill build">BUILD</span> (Clark = manual today)</td></tr>
+    <tr><td>4</td><td>Signature reminder → release (offer sent, never signed)</td><td>offer + 48h silence</td><td><span class="pill build">BUILD</span></td></tr>
+    <tr><td>5</td><td>Human-filtered open/click tracking on all journey emails</td><td>open pixel + bot/proxy filter, click log per email</td><td><span class="pill build">BUILD</span></td></tr>
+    <tr><td>6</td><td>Tour no-show flag + "we missed you" rebook</td><td>manual flag; default = attended</td><td><span class="pill build">BUILD</span></td></tr>
+    <tr><td>7</td><td>Tour invites, winback rail, tour self-service</td><td>-</td><td><span class="pill live">LIVE</span></td></tr>
+  </table>
 </div>
 
-<p class="note">Wireframe v1 · numbers are today's verified audit values where known (apps, tours, secured, packets); traffic-stage values are illustrative until wired. Test/demo rows excluded by the same filter the canary uses.</p>
+<p class="note">Counts = today's verified 30d audit (19 started · 15 paid · 4 exited · 9 signed · 8 secured · 1 released). Kindred renders this same tree live per window/room/source; clicking any node lists its families.</p>
 
 </body>
 </html>
